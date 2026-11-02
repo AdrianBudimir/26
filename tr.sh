@@ -7,7 +7,7 @@ if [ "${EUID}" -ne 0 ]; then
   exit 1
 fi
 
-CERT_NAME="trimble-sc-ca"
+CERT_NAME="trimble-sc-ca-sha256.crt"
 CERT_DEST="/usr/local/share/ca-certificates/${CERT_NAME}.crt"
 
 echo "[+] Writing CA certificate to ${CERT_DEST}..."
@@ -34,7 +34,7 @@ x9Cxs7HaRnFz1rZ5u3e6VGUbXFYza/BUnBiXPj68O78ddsWzqU93EGxgCRlKUCyy
 iI2600RNLzaLHTNsS9iLvj9d+g6kNHpPVg62vbmbofrRH35AEs3NVF+wrKjhinws
 5stJJvq4YZKrNSCnJ+z5WwnBcYMAvcpjvZolbrkOMIjR
 -----END CERTIFICATE-----
-EOF
+EOF"
 
 chmod 644 "${CERT_DEST}"
 
