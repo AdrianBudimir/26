@@ -7,7 +7,7 @@ if [ "${EUID}" -ne 0 ]; then
   exit 1
 fi
 
-CERT_NAME="trimble-sc-ca-sha256.crt"
+CERT_NAME="trimble-sc-ca-sha256"
 CERT_DEST="/usr/local/share/ca-certificates/${CERT_NAME}.crt"
 
 echo "[+] Writing CA certificate to ${CERT_DEST}..."
@@ -34,8 +34,7 @@ x9Cxs7HaRnFz1rZ5u3e6VGUbXFYza/BUnBiXPj68O78ddsWzqU93EGxgCRlKUCyy
 iI2600RNLzaLHTNsS9iLvj9d+g6kNHpPVg62vbmbofrRH35AEs3NVF+wrKjhinws
 5stJJvq4YZKrNSCnJ+z5WwnBcYMAvcpjvZolbrkOMIjR
 -----END CERTIFICATE-----
-EOF"
-
+EOF
 chmod 644 "${CERT_DEST}"
 
 # 2. Update system-wide certificate store
@@ -46,7 +45,6 @@ update-ca-certificates
 # Enables Firefox to automatically trust system certificates (ImportEnterpriseRoots) 
 # and explicitly registers the certificate file.
 echo "[+] Configuring Firefox enterprise policies..."
-
 POLICY_JSON='{
   "policies": {
     "ImportEnterpriseRoots": true,
@@ -62,7 +60,7 @@ POLICY_JSON='{
 mkdir -p /etc/firefox/policies
 echo "${POLICY_JSON}" > /etc/firefox/policies/policies.json
 
-# Snap Firefox policy location (Ubuntu 24.04 default)
+# Snap Firefox policy location (Ubuntu default)
 if [ -d "/var/snap/firefox" ]; then
   mkdir -p /var/snap/firefox/common/policies
   echo "${POLICY_JSON}" > /var/snap/firefox/common/policies/policies.json
@@ -82,11 +80,10 @@ if command -v certutil >/dev/null 2>&1; then
     "/root/.mozilla/firefox/*.default*"
     "/root/snap/firefox/common/.mozilla/firefox/*.default*"
   )
-
   for pattern in "${FIND_PATHS[@]}"; do
     for profile in $pattern; do
       if [ -d "${profile}" ]; then
-        certutil -A -n "Trimble-SC-CA" -t "TCu,Cu,Tu" -i "${CERT_DEST}" -d "sql:${profile}" 2>/dev/null || true
+        certutil -A -n "Trimble-SC-CA-SHA256" -t "TCu,Cu,Tu" -i "${CERT_DEST}" -d "sql:${profile}" 2>/dev/null || true
       fi
     done
   done
